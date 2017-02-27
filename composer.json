@@ -1,0 +1,28 @@
+{
+	"name": "skeeks/cms-vk-database",
+	"description": "Vk database",
+	"keywords": ["yii", "skeeks", "framework", "component"],
+  	"homepage": "https://cms.skeeks.com/",
+	"type": "yii2-extension",
+	"license": "GPL-3.0+",
+	"support": {
+        "issues": "https://skeeks.com/",
+        "wiki": "https://cms.skeeks.com/docs",
+        "source": "https://github.com/skeeks-cms/cms-vk-database.git"
+    },
+	"authors": [
+		{
+			"name": "Semenov Alexander",
+			"email": "semenov@skeeks.com"
+		}
+	],
+	"require": {
+		"skeeks/cms": "*",
+		"skeeks/cms": "*"
+	},
+    "autoload": {
+        "psr-4": {
+            "skeeks\\cms\\vkDatabase\\": "src/"
+        }
+    }
+}
