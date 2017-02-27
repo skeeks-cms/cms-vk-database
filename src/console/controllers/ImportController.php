@@ -20,30 +20,30 @@ class ImportController extends Controller
      */
     public function actionCountries()
     {
-        $vk = \Yii::$app->vkApi;
-        print_r($vk->get('database.getCountries'));die;
+        //$vk = \Yii::$app->vkApi;
+        //print_r($vk->post('database.getCountries'));die;
 
-        print_r(file_get_contents("https://api.vk.com/method/database.getCountries?need_all=1&v=5.62"));die;
+        //print_r(file_get_contents("https://api.vk.com/method/database.getCountries?need_all=1&v=5.62"));die;
 
-        $apiUrl = "https://api.vk.com/method/database.getCountries?need_all=1&v=5.62";
+        $apiUrl = "https://api.vk.com/method/database.getCountries?need_all=1&v=5.62&count=300";
 
 
         $client = new Client([
-            'requestConfig' => [
+            /*'requestConfig' => [
                 'format' => Client::FORMAT_JSON
-            ]
+            ]*/
         ]);
         $httpRequest = $client->createRequest()
                             ->setMethod("GET")
                             ->setUrl($apiUrl)
                             //->addHeaders(['Content-type' => 'application/json'])
-                            //->addHeaders(['user-agent' => 'JSON-RPC PHP Client'])
+                            ->addHeaders(['accept-language' => 'ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4'])
                             ->setOptions([
                                 'timeout' => 10
                             ]);
         $httpResponse       = $httpRequest->send();
 
-        print_r($httpResponse->getData());die;
+        print_r($httpResponse->data);die;
 
         $this->stdout("test");
     }
