@@ -18,7 +18,7 @@
 	],
 	"require": {
 		"skeeks/cms": "*",
-		"skeeks/cms": "*"
+		"jumper423/yii2-vk": "*"
 	},
     "autoload": {
         "psr-4": {

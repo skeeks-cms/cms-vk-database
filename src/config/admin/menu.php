@@ -7,7 +7,7 @@
  */
 return
 [
-    'exportImport' =>
+    /*'exportImport' =>
     [
         "label"     => \Yii::t('skeeks/import', "Export / Import"),
         "img"       => ['\skeeks\cms\import\assets\ImportAsset', 'icons/export.png'],
@@ -28,15 +28,9 @@ return
                         "label"     => \Yii::t('skeeks/import', "All kinds of imports"),
                         "img"       => ['\skeeks\cms\import\assets\ImportAsset', 'icons/import.png'],
                         "url"       => ["cmsImport/admin-import-task"],
-                    ]/*,
-
-                    [
-                        "label"     => \Yii::t('skeeks/import', "CSV"),
-                        "img"       => ['\skeeks\cms\import\assets\ImportAsset', 'icons/csv.png'],
-                        "url"       => ["cmsImport/admin-import-task"],
-                    ],*/
+                    ],
                 ],
             ],
         ]
-    ]
+    ]*/
 ];
