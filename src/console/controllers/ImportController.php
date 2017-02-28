@@ -76,6 +76,10 @@ class ImportController extends Controller
     }
 
 
+    /**
+     * Import regions
+     * @param int $vkId
+     */
     public function actionRegions($vkId = 1)
     {
         $vkCountry = VkCountry::find()->where(['vk_id' => $vkId])->one();
@@ -139,6 +143,10 @@ class ImportController extends Controller
         }
     }
 
+    /**
+     * Import cities
+     * @param int $vkId
+     */
     public function actionCities($vkId = 1)
     {
         /**
@@ -242,11 +250,18 @@ class ImportController extends Controller
         }
 
 
-
-
+        /**
+         * @var $vkCity VkCity
+         */
         foreach (VkCity::find()->where(['country_id' => $vkCountry->id])->each(100) as $vkCity)
         {
             $this->stdout("City: {$vkCity->name}\n", Console::BOLD);
+
+            if ($vkCity->vkSchools)
+            {
+                $this->stdout("\t - has schools\n", Console::FG_YELLOW);
+                continue;
+            }
 
             $vkCityId = $vkCity->vk_id;
 

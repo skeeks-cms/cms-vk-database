@@ -17,6 +17,7 @@ use Yii;
  *
  * @property VkRegion $region
  * @property VkCountry $country
+ * @property VkSchool[] $vkSchools
  */
 class VkCity extends \yii\db\ActiveRecord
 {
@@ -73,5 +74,13 @@ class VkCity extends \yii\db\ActiveRecord
     public function getCountry()
     {
         return $this->hasOne(VkCountry::className(), ['id' => 'country_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVkSchools()
+    {
+        return $this->hasMany(VkSchool::className(), ['city_id' => 'id']);
     }
 }

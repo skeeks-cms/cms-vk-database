@@ -18,6 +18,7 @@
 	],
 	"require": {
 		"skeeks/cms": "*",
+		"jumper423/yii2-vk": "2.*",
 		"yiisoft/yii2-httpclient": "*"
 	},
     "autoload": {
