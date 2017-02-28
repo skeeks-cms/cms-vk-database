@@ -3,7 +3,7 @@ return [
 
     'components' =>
     [
-        'vkApi' => [
+        /*'vkApi' => [
             'class' => 'jumper423\VK',
             'clientId' => '5797103',
             'clientSecret' => 'NlAONuuMLwUvvqYWMuxQ',
@@ -11,7 +11,10 @@ return [
             'delayExecute' => 120, // Задержка между группами инструкций в очереди
             'limitExecute' => 1, // Количество инструкций на одно выполнении в очереди
             'captcha' => 'captcha', // Компонент по распознованию капчи
-        ],
+
+            		"jumper423/yii2-vk": "2.*",
+
+        ],*/
 
         'vkDatabase' => [
             'class'     => 'skeeks\cms\vkDatabase\VkDatabaseComponent',
