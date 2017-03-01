@@ -5,14 +5,14 @@ namespace skeeks\cms\vkDatabase\models;
 use Yii;
 
 /**
- * This is the model class for table "{{%vk_school}}".
+ * This is the model class for table "vk_school".
  *
  * @property integer $id
- * @property integer $city_id
+ * @property integer $vk_city_id
  * @property integer $vk_id
  * @property string $name
  *
- * @property VkCity $city
+ * @property VkCity $vkCity
  */
 class VkSchool extends \yii\db\ActiveRecord
 {
@@ -21,7 +21,7 @@ class VkSchool extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%vk_school}}';
+        return 'vk_school';
     }
 
     /**
@@ -30,11 +30,11 @@ class VkSchool extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['city_id', 'vk_id'], 'required'],
-            [['city_id', 'vk_id'], 'integer'],
+            [['vk_city_id', 'vk_id'], 'required'],
+            [['vk_city_id', 'vk_id'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['vk_id'], 'unique'],
-            [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => VkCity::className(), 'targetAttribute' => ['city_id' => 'id']],
+            [['vk_city_id'], 'exist', 'skipOnError' => true, 'targetClass' => VkCity::className(), 'targetAttribute' => ['vk_city_id' => 'vk_id']],
         ];
     }
 
@@ -44,18 +44,18 @@ class VkSchool extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('skeeks/vkDatabase', 'ID'),
-            'city_id' => Yii::t('skeeks/vkDatabase', 'City ID'),
-            'vk_id' => Yii::t('skeeks/vkDatabase', 'Vk ID'),
-            'name' => Yii::t('skeeks/vkDatabase', 'Name'),
+            'id' => 'ID',
+            'vk_city_id' => 'Vk City ID',
+            'vk_id' => 'Vk ID',
+            'name' => 'Name',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCity()
+    public function getVkCity()
     {
-        return $this->hasOne(VkCity::className(), ['id' => 'city_id']);
+        return $this->hasOne(VkCity::className(), ['vk_id' => 'vk_city_id']);
     }
 }

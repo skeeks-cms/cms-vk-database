@@ -5,7 +5,7 @@ namespace skeeks\cms\vkDatabase\models;
 use Yii;
 
 /**
- * This is the model class for table "{{%vk_country}}".
+ * This is the model class for table "vk_country".
  *
  * @property integer $id
  * @property integer $vk_id
@@ -21,7 +21,7 @@ class VkCountry extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%vk_country}}';
+        return 'vk_country';
     }
 
     /**
@@ -43,9 +43,9 @@ class VkCountry extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('skeeks/vkDatabase', 'ID'),
-            'vk_id' => Yii::t('skeeks/vkDatabase', 'Vk ID'),
-            'name' => Yii::t('skeeks/vkDatabase', 'Name'),
+            'id' => 'ID',
+            'vk_id' => 'Vk ID',
+            'name' => 'Name',
         ];
     }
 
@@ -54,7 +54,7 @@ class VkCountry extends \yii\db\ActiveRecord
      */
     public function getVkCities()
     {
-        return $this->hasMany(VkCity::className(), ['country_id' => 'id']);
+        return $this->hasMany(VkCity::className(), ['vk_country_id' => 'vk_id']);
     }
 
     /**
@@ -62,6 +62,6 @@ class VkCountry extends \yii\db\ActiveRecord
      */
     public function getVkRegions()
     {
-        return $this->hasMany(VkRegion::className(), ['country_id' => 'id']);
+        return $this->hasMany(VkRegion::className(), ['vk_country_id' => 'vk_id']);
     }
 }

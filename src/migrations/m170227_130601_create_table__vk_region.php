@@ -27,7 +27,7 @@ class m170227_130601_create_table__vk_region extends Migration
         $this->createTable($tableName, [
             'id'                    => $this->primaryKey(),
 
-            'country_id'            => $this->integer()->notNull(),
+            'vk_country_id'         => $this->integer()->notNull(),
 
             'vk_id'                 => $this->integer()->notNull()->unique(),
             'name'                  => $this->string(255),
@@ -40,14 +40,14 @@ class m170227_130601_create_table__vk_region extends Migration
         $this->addCommentOnTable($tableName, '');
 
         $this->addForeignKey(
-            "{$tableName}__country_id", $tableName,
-            'country_id', '{{%vk_country}}', 'id', 'CASCADE', 'CASCADE'
+            "{$tableName}__vk_country_id", $tableName,
+            'vk_country_id', '{{%vk_country}}', 'vk_id', 'CASCADE', 'CASCADE'
         );
     }
 
     public function safeDown()
     {
-        $this->dropForeignKey("{$tableName}__country_id", $tableName);
+        $this->dropForeignKey("{$tableName}__vk_country_id", $tableName);
         $this->dropTable($tableName);
     }
 }

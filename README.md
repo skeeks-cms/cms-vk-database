@@ -32,6 +32,14 @@ Configuration app
 
 ```php
 
+php yii vkDatabase/import/countries
+php yii vkDatabase/import/regions
+
+```
+
+
+```php
+
 'components' =>
 [
 

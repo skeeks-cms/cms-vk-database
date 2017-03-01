@@ -80,11 +80,11 @@ class ImportController extends Controller
 
     /**
      * Import regions
-     * @param int $vkId
+     * @param int $countryVkId
      */
-    public function actionRegions($vkId = 1)
+    public function actionRegions($countryVkId = 1)
     {
-        $vkCountry = VkCountry::find()->where(['vk_id' => $vkId])->one();
+        $vkCountry = VkCountry::find()->where(['vk_id' => $countryVkId])->one();
         if (!$vkCountry)
         {
             $this->stdout("Country not found\n", Console::FG_RED);
@@ -94,7 +94,7 @@ class ImportController extends Controller
 
 
 
-        $apiUrl = "https://api.vk.com/method/database.getRegions?country_id={$vkId}&v=5.62&count=1000";
+        $apiUrl = "https://api.vk.com/method/database.getRegions?country_id={$countryVkId}&v=5.62&count=1000";
 
         $this->stdout("Request to: " . $apiUrl . "\n", Console::BOLD);
 
@@ -131,7 +131,7 @@ class ImportController extends Controller
 
             $vkRegion = new VkRegion();
 
-            $vkRegion->country_id   = $vkCountry->id;
+            $vkRegion->vk_country_id   = $vkCountry->vk_id;
             $vkRegion->vk_id        = $id;
             $vkRegion->name         = $title;
 

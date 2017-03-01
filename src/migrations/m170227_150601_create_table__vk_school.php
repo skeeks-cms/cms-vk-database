@@ -27,7 +27,7 @@ class m170227_150601_create_table__vk_school extends Migration
         $this->createTable($tableName, [
             'id'                    => $this->primaryKey(),
 
-            'city_id'               => $this->integer()->notNull(),
+            'vk_city_id'            => $this->integer()->notNull(),
 
             'vk_id'                 => $this->integer()->notNull()->unique(),
             'name'                  => $this->string(255),
@@ -40,15 +40,15 @@ class m170227_150601_create_table__vk_school extends Migration
         $this->addCommentOnTable($tableName, '');
 
         $this->addForeignKey(
-            "{$tableName}__city_id", $tableName,
-            'city_id', '{{%vk_city}}', 'id', 'CASCADE', 'CASCADE'
+            "{$tableName}__vk_city_id", $tableName,
+            'vk_city_id', '{{%vk_city}}', 'vk_id', 'CASCADE', 'CASCADE'
         );
 
     }
 
     public function safeDown()
     {
-        $this->dropForeignKey("{$tableName}__city_id", $tableName);
+        $this->dropForeignKey("{$tableName}__vk_city_id", $tableName);
         $this->dropTable($tableName);
     }
 }
