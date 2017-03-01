@@ -12,6 +12,7 @@ use Yii;
  * @property integer $vk_id
  * @property string $name
  *
+ * @property VkCity[] $vkCities
  * @property VkCountry $country
  */
 class VkRegion extends \yii\db\ActiveRecord
@@ -49,6 +50,14 @@ class VkRegion extends \yii\db\ActiveRecord
             'vk_id' => Yii::t('skeeks/vkDatabase', 'Vk ID'),
             'name' => Yii::t('skeeks/vkDatabase', 'Name'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVkCities()
+    {
+        return $this->hasMany(VkCity::className(), ['region_id' => 'id']);
     }
 
     /**

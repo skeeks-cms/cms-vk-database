@@ -11,6 +11,7 @@ use skeeks\cms\vkDatabase\models\VkCountry;
 use skeeks\cms\vkDatabase\models\VkRegion;
 use skeeks\cms\vkDatabase\models\VkSchool;
 use yii\console\Controller;
+use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Console;
 use yii\helpers\Json;
@@ -58,6 +59,7 @@ class ImportController extends Controller
             if ($vkCountry)
             {
                 $this->stdout("\t\t - exist\n", Console::FG_YELLOW);
+                continue;
             }
 
             $vkCountry = new VkCountry();
@@ -124,6 +126,7 @@ class ImportController extends Controller
             if ($vkRegion)
             {
                 $this->stdout("\t\t - exist\n", Console::FG_YELLOW);
+                continue;
             }
 
             $vkRegion = new VkRegion();
@@ -164,11 +167,23 @@ class ImportController extends Controller
         }
 
 
+        /**
+         * @var $vkRegion VkRegion
+         */
         foreach ($vkCountry->vkRegions as $vkRegion)
         {
             $this->stdout("Region: {$vkRegion->name}\n", Console::BOLD);
 
             $vkRegionId = $vkRegion->vk_id;
+
+            if ($vkRegion->getVkCities()->count() < 999)
+            {
+                continue;
+            }
+
+
+
+            $this->stdout("Regions has more 999 cities\n", Console::FG_YELLOW);
 
 
             $apiUrl = "https://api.vk.com/method/database.getCities?country_id={$vkId}&need_all=1&region_id={$vkRegionId}&v=5.62&count=1000";
@@ -195,6 +210,42 @@ class ImportController extends Controller
             $this->stdout("\t Total: {$totalItems}\n", Console::FG_YELLOW);
 
             $items = ArrayHelper::getValue($httpResponse->data, 'response.items');
+
+            if ($totalItems > 1000)
+            {
+                $pagination = new Pagination();
+                $pagination->page = 1;
+                $pagination->defaultPageSize = 1000;
+                $pagination->pageSizeLimit = [1, 1000];
+                $pagination->totalCount = $totalItems;
+
+                $totalPages = $pagination->pageCount - 1;
+
+                for ($i = 1; $i <= $totalPages; $i ++)
+                {
+                    $offset = 1000 * $i;
+                    $apiUrl = "https://api.vk.com/method/database.getCities?country_id={$vkId}&need_all=1&region_id={$vkRegionId}&v=5.62&count=1000&offset=" . $offset;
+                    $this->stdout("\t\t Page: {$i}\n", Console::FG_YELLOW);
+                    $this->stdout("\t\t Request: {$apiUrl}\n", Console::FG_YELLOW);
+
+
+                    $client = new Client();
+                    $httpRequest = $client->createRequest()
+                                        ->setMethod("GET")
+                                        ->setUrl($apiUrl)
+                                        ->addHeaders(['accept-language' => 'ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4'])
+                                        ->setOptions([
+                                            'timeout' => 10
+                                        ]);
+                    $httpResponse       = $httpRequest->send();
+
+                    $itemsTmp = ArrayHelper::getValue($httpResponse->data, 'response.items');
+                    $items = ArrayHelper::merge($items, $itemsTmp);
+                }
+            }
+
+
+
             foreach ($items as $item)
             {
                 $id = ArrayHelper::getValue($item, 'id');
@@ -208,6 +259,7 @@ class ImportController extends Controller
                 if ($vkCity)
                 {
                     $this->stdout("\t\t - exist\n", Console::FG_YELLOW);
+                    continue;
                 }
 
                 $vkCity = new VkCity();
@@ -250,12 +302,18 @@ class ImportController extends Controller
         }
 
 
+        $lastSchool = VkSchool::find()
+            ->orderBy(['city.vk_id' => SORT_DESC])
+            ->joinWith('city as city')
+            ->limit(1)
+            ->one();
+
         /**
          * @var $vkCity VkCity
          */
-        foreach (VkCity::find()->where(['country_id' => $vkCountry->id])->each(100) as $vkCity)
+        foreach (VkCity::find()->where(['country_id' => $vkCountry->id])->andWhere([">=", "vk_id", $lastSchool->city->vk_id])->orderBy(['vk_id' => SORT_ASC])->each(100) as $vkCity)
         {
-            $this->stdout("City: {$vkCity->name}\n", Console::BOLD);
+            $this->stdout("City: {$vkCity->name}; vk_id = {$vkCity->vk_id}\n", Console::BOLD);
 
             if ($vkCity->vkSchools)
             {
@@ -290,6 +348,43 @@ class ImportController extends Controller
             $this->stdout("\t Total: {$totalItems}\n", Console::FG_YELLOW);
 
             $items = ArrayHelper::getValue($httpResponse->data, 'response.items');
+
+
+
+
+            if ($totalItems > 10000)
+            {
+                $pagination = new Pagination();
+                $pagination->page = 1;
+                $pagination->defaultPageSize = 10000;
+                $pagination->pageSizeLimit = [1, 10000];
+                $pagination->totalCount = $totalItems;
+
+                $totalPages = $pagination->pageCount - 1;
+
+                for ($i = 1; $i <= $totalPages; $i ++)
+                {
+                    $offset = 10000 * $i;
+                    $apiUrl = "https://api.vk.com/method/database.getSchools?city_id={$vkCityId}&v=5.62&count=10000&offset=" . $offset;
+                    $this->stdout("\t\t Page: {$i}\n", Console::FG_YELLOW);
+                    $this->stdout("\t\t Request: {$apiUrl}\n", Console::FG_YELLOW);
+
+
+                    $client = new Client();
+                    $httpRequest = $client->createRequest()
+                                        ->setMethod("GET")
+                                        ->setUrl($apiUrl)
+                                        ->addHeaders(['accept-language' => 'ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4'])
+                                        ->setOptions([
+                                            'timeout' => 10
+                                        ]);
+                    $httpResponse       = $httpRequest->send();
+
+                    $itemsTmp = ArrayHelper::getValue($httpResponse->data, 'response.items');
+                    $items = ArrayHelper::merge($items, $itemsTmp);
+                }
+            }
+
             foreach ($items as $item)
             {
                 $id = ArrayHelper::getValue($item, 'id');
@@ -303,6 +398,7 @@ class ImportController extends Controller
                 if ($vkSchool)
                 {
                     $this->stdout("\t\t - exist\n", Console::FG_YELLOW);
+                    continue;
                 }
 
                 $vkSchool = new VkSchool();
@@ -321,7 +417,7 @@ class ImportController extends Controller
                 }
             }
 
-            sleep(1);
+            usleep(300);
         }
     }
 }
