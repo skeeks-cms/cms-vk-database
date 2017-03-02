@@ -3,6 +3,7 @@
 namespace skeeks\cms\vkDatabase\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "vk_city".
@@ -21,6 +22,40 @@ use Yii;
  */
 class VkCity extends \yii\db\ActiveRecord
 {
+    /**
+     * @param $vk_id
+     *
+     * @return null|static|VkCity
+     */
+    static public function getOneFromApi($vk_id)
+    {
+        if ($model = static::findOne($vk_id))
+        {
+            return $model;
+        }
+
+        $data = \Yii::$app->vkDatabase->getCitiesById([$vk_id]);
+
+        if (!$data)
+        {
+            return null;
+        }
+
+        $data = ArrayHelper::getValue($data, 'response.0');
+
+        if (!$data)
+        {
+            return null;
+        }
+
+        $model = new static([
+            'vk_id' => ArrayHelper::getValue($data, 'id'),
+            'name' => ArrayHelper::getValue($data, 'title'),
+        ]);
+
+        return $model;
+    }
+
     /**
      * @inheritdoc
      */

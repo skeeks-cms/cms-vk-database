@@ -9,9 +9,10 @@
  * @date 10.09.2015
  */
 namespace yii\web;
+use skeeks\cms\vkDatabase\VkDatabaseComponent;
 
 /**
- * @property ImportComponent $cmsImport
+ * @property VkDatabaseComponent $vkDatabase
 
  * Class Application
  * @package yii\web
