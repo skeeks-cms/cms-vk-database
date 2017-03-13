@@ -7,6 +7,7 @@
  */
 namespace skeeks\cms\vkDatabase\widgets;
 
+use skeeks\cms\vkDatabase\models\VkCity;
 use skeeks\cms\vkDatabase\widgets\assets\VkAutocompleteCityWidgetAsset;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -33,8 +34,9 @@ use yii\widgets\InputWidget;
     });
  *
  *
- * @property string $autocompleteId     read-only
- * @property string $autocompleteName   read-only
+ * @property string $autocompleteId         read-only
+ * @property string $autocompleteName       read-only
+ * @property string $autocompleteValue      read-only
  *
  * @package skeeks\cms\vkDatabase\widgets
  */
@@ -142,6 +144,7 @@ class VkAutocompleteCityWidget extends InputWidget
 
         $this->clientOptions['id']                  = $this->id;
         $this->clientOptions['autocompleteName']    = $this->autocompleteName;
+        $this->clientOptions['autocompleteValue']   = $this->autocompleteValue;
         $this->clientOptions['autocompleteId']      = $this->autocompleteId;
         $this->clientOptions['elementId']           = $formElementId;
 
@@ -156,6 +159,32 @@ class VkAutocompleteCityWidget extends InputWidget
             'formElement' => $formElement
         ]);
 
+    }
+
+    /**
+     * @return string
+     */
+    public function getAutocompleteValue()
+    {
+        if ($this->hasModel())
+        {
+            $value = $this->model->{$this->attribute};
+        } else
+        {
+            $value = $this->value;
+        }
+
+        if ($value)
+        {
+            $city = VkCity::getOneFromApi($value);
+            if ($city)
+            {
+                $value = $city->name;
+            }
+        }
+
+
+        return $value;
     }
 
     /**

@@ -13,17 +13,24 @@
             var self = this;
 
             this.jSelectSchool = $('#' + this.get('elementId'));
+            this.defaultValue = this.get('value');
 
-                            console.log($('#' + this.get('observeVkCityInputId')));
-            $('#' + this.get('observeVkCityInputId')).on('change', function()
+            this.jCity = $('#' + this.get('observeVkCityInputId'));
+            this.jCity.on('change', function()
             {
-                console.log($(this).val());
                 self.initByCity($(this).val());
             });
+
+            if (this.jCity.val())
+            {
+                self.initByCity(this.jCity.val());
+            }
         },
 
         initByCity: function(city_id)
         {
+            var self = this;
+
             var jSelectSchool = this.jSelectSchool;
             jSelectSchool.empty().append();
             jSelectSchool.attr('disabled', 'disabled');
@@ -47,7 +54,12 @@
                 {
                     jSelectSchool.append($("<option>", {
                         'value' : id
-                    }).append(title))
+                    }).append(title));
+
+                    if (id == self.defaultValue)
+                    {
+                        jSelectSchool.val(id);
+                    }
                 });
 
                 jSelectSchool.trigger("chosen:updated");
@@ -56,4 +68,5 @@
             ajaxQuery.execute();
         },
     });
+
 })(sx, sx.$, sx._);

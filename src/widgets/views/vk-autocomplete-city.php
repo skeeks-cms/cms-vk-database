@@ -13,6 +13,7 @@ $widget = $this->context;
 <? \yii\helpers\Html::beginTag('div', $widget->wrapperOptions); ?>
     <? echo \yii\jui\AutoComplete::widget([
         'name'          => $widget->autocompleteName,
+        'value'         => $widget->autocompleteValue,
         'clientOptions' => $widget->autocompleteClientOptions,
         'options'       => $widget->autocompleteOptions
     ]); ?>

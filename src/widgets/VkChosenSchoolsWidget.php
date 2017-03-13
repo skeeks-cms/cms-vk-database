@@ -70,16 +70,33 @@ class VkChosenSchoolsWidget extends Chosen
         }
 
         $js = Json::encode([
-            'id'        => $this->id,
-            'elementId' => $this->elementId,
-            'observeVkCityInputId' => $this->observeVkCityInputId,
-            'backend' => $this->backend
+            'id'                    => $this->id,
+            'elementId'             => $this->elementId,
+            'value'                 => $this->getRealValue(),
+            'observeVkCityInputId'  => $this->observeVkCityInputId,
+            'backend'               => $this->backend
         ]);
 
         $this->view->registerJs(<<<JS
 new sx.classes.VkChoosenSchools({$js});
 JS
 );
+    }
+
+    /**
+     * @return string
+     */
+    public function getRealValue()
+    {
+        if ($this->hasModel())
+        {
+            $value = $this->model->{$this->attribute};
+        } else
+        {
+            $value = $this->value;
+        }
+
+        return $value;
     }
 
     /**
