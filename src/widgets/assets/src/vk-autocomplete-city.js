@@ -11,14 +11,35 @@
         _init: function()
         {},
 
+
         _onDomReady: function()
         {
+            var self = this;
+
             this.addTemplate();
+            this.jElement = $('#' + self.get('elementId'));
+            this.jElementAuto = $('#' + this.get('autocompleteId'));
+
+            this.jElementAuto.on('keyup', function()
+            {
+                self.jElement.val('');
+            });
+
+            this.jElementAuto.on('change', function()
+            {
+                _.delay(function()
+                {
+                    if (!self.jElement.val())
+                    {
+                        self.jElementAuto.val('');
+                    }
+                }, 200);
+
+            });
         },
 
         addTemplate: function()
         {
-            console.log(this.get('autocompleteId'));
             jQuery('#' + this.get('autocompleteId')).autocomplete( 'instance' )._renderItem = function( ul, item ) {
                 var title = item.title;
                 var subtitle = [];

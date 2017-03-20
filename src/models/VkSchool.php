@@ -25,7 +25,7 @@ class VkSchool extends \yii\db\ActiveRecord
      */
     static public function getOneFromApi($vk_id, $vk_city_id = null)
     {
-        if ($model = static::findOne($vk_id))
+        if ($model = static::findOne(['vk_id' => $vk_id]))
         {
             return $model;
         }
