@@ -17,25 +17,29 @@
             var self = this;
 
             this.addTemplate();
-            this.jElement = $('#' + self.get('elementId'));
-            this.jElementAuto = $('#' + this.get('autocompleteId'));
 
-            this.jElementAuto.on('keyup', function()
+            if (this.get('strict'))
             {
-                self.jElement.val('');
-            });
+                this.jElement = $('#' + self.get('elementId'));
+                this.jElementAuto = $('#' + this.get('autocompleteId'));
 
-            this.jElementAuto.on('change', function()
-            {
-                _.delay(function()
+                this.jElementAuto.on('keyup', function()
                 {
-                    if (!self.jElement.val())
-                    {
-                        self.jElementAuto.val('');
-                    }
-                }, 200);
+                    self.jElement.val('');
+                });
 
-            });
+                this.jElementAuto.on('change', function()
+                {
+                    _.delay(function()
+                    {
+                        if (!self.jElement.val())
+                        {
+                            self.jElementAuto.val('');
+                        }
+                    }, 200);
+
+                });
+            }
         },
 
         addTemplate: function()

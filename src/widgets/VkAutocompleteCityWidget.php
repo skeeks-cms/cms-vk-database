@@ -85,6 +85,11 @@ class VkAutocompleteCityWidget extends InputWidget
      */
     public $vkCountryId = 1;
 
+    /**
+     * @var bool
+     */
+    public $strict = true;
+
 
     /**
      * @throws \yii\base\InvalidConfigException
@@ -147,6 +152,7 @@ class VkAutocompleteCityWidget extends InputWidget
         $this->clientOptions['autocompleteValue']   = $this->autocompleteValue;
         $this->clientOptions['autocompleteId']      = $this->autocompleteId;
         $this->clientOptions['elementId']           = $formElementId;
+        $this->clientOptions['strict']              = (int) $this->strict;
 
         $this->autocompleteClientOptions['select'] = new \yii\web\JsExpression("function( event, ui ) {
             $('#{$formElementId}').val( ui.item.id );
