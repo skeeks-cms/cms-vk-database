@@ -24,5 +24,11 @@
         "psr-4": {
             "skeeks\\cms\\vkDatabase\\": "src/"
         }
+    },
+    "extra": {
+        "config-plugin": {
+            "web": "src/config/main.php",
+            "console": "src/config/main-console.php"
+        }
     }
 }
